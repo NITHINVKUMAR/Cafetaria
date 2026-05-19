@@ -1,0 +1,15 @@
+package com.example.Cafeteria;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@SpringBootApplication
+@EnableJpaAuditing
+public class CafeteriaApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CafeteriaApplication.class, args);
+	}
+
+}
