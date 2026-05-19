@@ -19,9 +19,9 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE restaurants SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class Restaurant extends BaseEntity{
-    @Column(name = "name")
+    @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(name = "location")
+    @Column(name = "location",nullable = false)
     private String location;
 }
