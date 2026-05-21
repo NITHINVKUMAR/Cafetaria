@@ -1,6 +1,7 @@
 package com.example.Cafeteria.Services;
 
 import com.example.Cafeteria.Dto.CreateMenuItemRequestDto;
+import com.example.Cafeteria.Exceptions.ResourceNotFoundExceptions;
 import com.example.Cafeteria.Repositories.MenuItemRepository;
 import com.example.Cafeteria.Schema.MenuItem;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +21,22 @@ public class MenuItemService {
     }
 
     public List<MenuItem> getAllMenuItems() {
-        return menuItemRepository.findAll();
+        List<MenuItem> menuItems = menuItemRepository.findAll();
+        if(menuItems.isEmpty()){
+            throw new ResourceNotFoundExceptions("Menu Items not found");
+        }
+        return menuItems;
     }
 
     public MenuItem getMenuItemById(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product with id" + id + "Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundExceptions("Product with id" + id + "Not Found"));
         return menuItem;
     }
 
     public MenuItem updateMenuItem(Long id, CreateMenuItemRequestDto requestDto) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product with id " + id + "Not found"));
+                .orElseThrow(() -> new ResourceNotFoundExceptions("Product with id " + id + "Not found"));
         menuItem.setName(requestDto.getName());
         menuItem.setDescription(requestDto.getDescription());
         menuItem.setPrice(requestDto.getPrice());
@@ -42,7 +47,7 @@ public class MenuItemService {
 
     public void deleteMenuItemById(Long id) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product with id " + id + "Not found"));
+                .orElseThrow(() -> new ResourceNotFoundExceptions("Product with id " + id + "Not found"));
         menuItemRepository.deleteById(id);
     }
 }

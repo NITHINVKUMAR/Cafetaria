@@ -3,10 +3,14 @@ package com.example.Cafeteria.Contollers;
 import com.example.Cafeteria.Dto.CreateMenuItemRequestDto;
 import com.example.Cafeteria.Schema.MenuItem;
 import com.example.Cafeteria.Services.MenuItemService;
+import com.example.Cafeteria.Utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Vector;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,27 +18,37 @@ import java.util.List;
 public class MenuItemController {
     private final MenuItemService menuItemService;
     @PostMapping
-    public MenuItem createMenuItem(@RequestBody CreateMenuItemRequestDto requestDto){
-        return menuItemService.createMenuItem(requestDto);
+    public ResponseEntity<ApiResponse<MenuItem>> createMenuItem(@RequestBody CreateMenuItemRequestDto requestDto){
+        MenuItem menuItem = menuItemService.createMenuItem(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(menuItem,"MenuItem Created Successfully"));
     }
 
     @GetMapping
-    public List<MenuItem>getAllMenuItems(){
-        return menuItemService.getAllMenuItems();
+    public ResponseEntity<ApiResponse<List<MenuItem>>> getAllMenuItems(){
+        List<MenuItem> menuItems = menuItemService.getAllMenuItems();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(menuItems,"Menu Items fetched successfully"));
     }
 
     @GetMapping("/{id}")
-    public MenuItem getMenuItemById(@PathVariable Long id){
-        return menuItemService.getMenuItemById(id);
+    public ResponseEntity<ApiResponse<MenuItem>> getMenuItemById(@PathVariable Long id){
+        MenuItem menuItems = menuItemService.getMenuItemById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(menuItems,"Menu Item fecthed successfully"));
     }
 
     @PutMapping("/{id}")
-    public MenuItem updateMenuItem(@PathVariable Long id,@RequestBody CreateMenuItemRequestDto requestDto){
-        return menuItemService.updateMenuItem(id,requestDto);
+    public ResponseEntity<ApiResponse<MenuItem>> updateMenuItem(@PathVariable Long id, @RequestBody CreateMenuItemRequestDto requestDto){
+        MenuItem menuItem = menuItemService.updateMenuItem(id,requestDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(menuItem,"Menu Item fecthed successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMenuItemById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<Void>> deleteMenuItemById(@PathVariable Long id){
         menuItemService.deleteMenuItemById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(null,"MenuItem Deleted Successfully"));
     }
 }
